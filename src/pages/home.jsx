@@ -10,7 +10,7 @@ import {
   Textarea,
   Checkbox,
 } from "@material-tailwind/react";
-import { PageTitle, Footer } from "@/widgets/layout";
+import { PageTitle, Footer, SimpleFooter } from "@/widgets/layout";
 import { FeatureCard, TeamCard } from "@/widgets/cards";
 import { featuresData, teamData, contactData } from "@/data";
 import { Canvas, useLoader } from "@react-three/fiber";
@@ -129,7 +129,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <section className="-mt-32 bg-white px-4 pb-20 pt-4">
+      <section className="-mt-32 bg-blue-gray-100 px-4 pb-20 pt-4">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featuresData.map(({ color, title, icon, description }) => (
@@ -144,10 +144,10 @@ const Home = () => {
               />
             ))}
           </div>
-          <div className="mt-32 flex flex-wrap items-center">
-            <div className="mx-auto mt-24 flex w-full justify-center px-4 md:w-12/12 lg:mt-0 h-[580px]">
-              <Card className="shadow-lg border shadow-gray-500/10 rounded-lg flex-1">
-                <CardHeader floated={false} className="relative flex justify-between items-center px-6 h-20">
+          <div className="mt-32 flex flex-wrap items-center justify-center">
+            <div className="w-full max-w-7xl px-4">
+              <Card className="w-[100%] mx-auto shadow-lg border shadow-gray-500/10 rounded-lg flex-1">
+                <CardHeader floated={false} className="relative flex bg-purple-200 justify-between items-center px-6 h-20">
                   <Typography variant="h6" className="text-center">
                     3D Model Configurator
                   </Typography>
@@ -182,24 +182,23 @@ const Home = () => {
                     <Typography className="font-normal text-blue-gray-500">
                       Select seat variant:
                     </Typography>
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex gap-2 mt-2 flex-wrap">
                       {renderVariantButtons("seat")}
                     </div>
                     <Typography className="font-normal text-blue-gray-500 mt-4">
                       Select legs variant:
                     </Typography>
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex gap-2 mt-2 flex-wrap">
                       {renderVariantButtons("legs")}
                     </div>
                   </div>
                 </CardBody>
               </Card>
-
             </div>
           </div>
         </div>
       </section>
-      <section className="relative bg-white py-24 px-4">
+      <section className="relative bg-blue-gray-50 py-24 px-4">
         <div className="container mx-auto">
           <PageTitle section="Contact Us" heading="Want to work with us?">
             Complete this form and we will get back to you in 24 hours.
@@ -235,7 +234,7 @@ const Home = () => {
         </div>
       </section>
       <div className="bg-white">
-        <Footer />
+        <SimpleFooter />
       </div>
     </>
   );
