@@ -1,110 +1,18 @@
-import React, { Suspense, useRef, useState } from "react";
+import React from "react";
 import {
-  Card,
-  CardBody,
-  CardHeader,
   Typography,
   Button,
-  IconButton,
   Input,
   Textarea,
   Checkbox,
 } from "@material-tailwind/react";
-import { PageTitle, Footer, SimpleFooter } from "@/widgets/layout";
-import { FeatureCard, TeamCard } from "@/widgets/cards";
-import { featuresData, teamData, contactData } from "@/data";
-import { Canvas, useLoader } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { PageTitle, SimpleFooter } from "@/widgets/layout";
+import { FeatureCard } from "@/widgets/cards";
+import { featuresData } from "@/data";
+import Models from "./models";
 
-function ObjModel({ modelPath, materialColors }) {
-  const obj = useLoader(OBJLoader, modelPath);
-
-  return (
-    <group>
-      {obj.children.map((child, index) => (
-        <mesh key={index} geometry={child.geometry}>
-          <meshStandardMaterial
-            attach="material"
-            color={materialColors[index] || "gray"}
-          />
-        </mesh>
-      ))}
-    </group>
-  );
-}
 
 const Home = () => {
-  const [model, setModel] = useState("sofa");
-  const [materialVariants, setMaterialVariants] = useState({
-    sofa: {
-      seat: ["valvet", "leather", "fabric"],
-      legs: ["gold", "chrome", "black"]
-    },
-    chair: {
-      seat: ["leather", "pattern", "valvet", "white fabric"],
-      legs: ["gold", "chrome", "black"]
-    },
-    desk: {
-      top: ["pollywood", "white oak", "black", "poplar"],
-      bottom: ["gold", "chrome", "black"]
-    },
-    bed: {
-      headboard: ["valvet", "leather", "fabric"],
-      pillow: ["grey fabric", "white fabric", "sky fabric"]
-    }
-  });
-
-  const [selectedVariants, setSelectedVariants] = useState({
-    seat: materialVariants[model]?.seat?.[0],
-    legs: materialVariants[model]?.legs?.[0]
-  });
-
-  const [materialColors, setMaterialColors] = useState(Array(2).fill("gray"));
-
-  const renderModel = () => {
-    const colors = [selectedVariants.seat, selectedVariants.legs];
-    switch (model) {
-      case "sofa":
-        return <ObjModel modelPath="/sofa.obj" materialColors={materialColors} />;
-      case "chair":
-        return <ObjModel modelPath="/chair.obj" materialColors={materialColors} />;
-      case "desk":
-        return <ObjModel modelPath="/desk.obj" materialColors={materialColors} />;
-      case "bed":
-        return <ObjModel modelPath="/bed.obj" materialColors={materialColors} />;
-      default:
-        return null;
-    }
-  };
-
-  const changeVariant = (part, variant) => {
-    setSelectedVariants({ ...selectedVariants, [part]: variant });
-    const newColors = [...materialColors];
-    switch (part) {
-      case "seat":
-        newColors[0] = variant;
-        break;
-      case "legs":
-        newColors[1] = variant;
-        break;
-      default:
-        break;
-    }
-    setMaterialColors(newColors);
-  };
-
-  const renderVariantButtons = (part) => {
-    return materialVariants[model]?.[part]?.map((variant, index) => (
-      <Button
-        key={index}
-        onClick={() => changeVariant(part, variant)}
-      >
-        {variant}
-      </Button>
-    ));
-  };
-
   return (
     <>
       <div className="relative flex h-screen content-center items-center justify-center pt-16 pb-32">
@@ -146,54 +54,7 @@ const Home = () => {
           </div>
           <div className="mt-32 flex flex-wrap items-center justify-center">
             <div className="w-full max-w-7xl px-4">
-              <Card className="w-[100%] mx-auto shadow-lg border shadow-gray-500/10 rounded-lg flex-1">
-                <CardHeader floated={false} className="relative flex bg-purple-200 justify-between items-center px-6 h-20">
-                  <Typography variant="h6" className="text-center">
-                    3D Model Configurator
-                  </Typography>
-                  <div className="flex gap-2">
-                    <Button color="blue" variant="filled" size="sm" onClick={() => setModel("sofa")}>
-                      Sofa
-                    </Button>
-                    <Button color="blue" variant="filled" size="sm" onClick={() => setModel("chair")}>
-                      Chair
-                    </Button>
-                    <Button color="blue" variant="filled" size="sm" onClick={() => setModel("desk")}>
-                      Desk
-                    </Button>
-                    <Button color="blue" variant="filled" size="sm" onClick={() => setModel("bed")}>
-                      Bed
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardBody className="flex h-[500px]">
-                  <div className="w-3/4 pr-4 h-full flex justify-center items-end pb-10 overflow-hidden">
-                    <Canvas className="w-full h-full">
-                      <Suspense fallback={null}>
-                        <ambientLight />
-                        <spotLight intensity={0.9} angle={0.1} penumbra={1} position={[10, 15, 10]} castShadow />
-                        {renderModel()}
-                        <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
-                      </Suspense>
-                    </Canvas>
-                  </div>
-                  <div className="border-l border-gray-300"></div>
-                  <div className="w-1/4 pl-4">
-                    <Typography className="font-normal text-blue-gray-500">
-                      Select seat variant:
-                    </Typography>
-                    <div className="flex gap-2 mt-2 flex-wrap">
-                      {renderVariantButtons("seat")}
-                    </div>
-                    <Typography className="font-normal text-blue-gray-500 mt-4">
-                      Select legs variant:
-                    </Typography>
-                    <div className="flex gap-2 mt-2 flex-wrap">
-                      {renderVariantButtons("legs")}
-                    </div>
-                  </div>
-                </CardBody>
-              </Card>
+              <Models/>
             </div>
           </div>
         </div>
