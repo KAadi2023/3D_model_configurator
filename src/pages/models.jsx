@@ -17,10 +17,12 @@ export function SofaModel({ selectedVariants }) {
         console.log('Updating materials for sofa:', selectedVariants);
 
         if (materials.ASSET_MAT_MR) {
+            const initialColor = new THREE.Color(0.529, 0.808, 0.922); // Light Sky Blue color
+
             const newColor = selectedVariants.seat === "velvet" ? new THREE.Color(0.7, 0.1, 0.1) :
                 selectedVariants.seat === "leather" ? new THREE.Color(0.4, 0.2, 0.1) :
                     selectedVariants.seat === "fabric" ? new THREE.Color(0.8, 0.8, 0.8) :
-                        materials.ASSET_MAT_MR.color;
+                        initialColor;
 
             materials.ASSET_MAT_MR.color.set(newColor);
             console.log('Updated material color:', materials.ASSET_MAT_MR.color);
@@ -194,7 +196,7 @@ const Models = () => {
                     <div className="flex gap-2 mt-2 flex-wrap">
                         {renderVariantButtons(model === "desk" ? "top" : "seat")}
                     </div>
-                    {/* {model !== "chair" && (
+                    {model !== "chair" && model !== "desk" && (
                         <>
                             <Typography className="font-normal text-blue-gray-500 mt-4">
                                 Select legs variant:
@@ -203,7 +205,7 @@ const Models = () => {
                                 {renderVariantButtons("legs")}
                             </div>
                         </>
-                    )} */}
+                    )}
                 </div>
             </CardBody>
         </Card>
