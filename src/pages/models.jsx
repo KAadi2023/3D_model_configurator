@@ -13,23 +13,27 @@ import * as THREE from "three";
 export function SofaModel({ selectedVariants }) {
     const { nodes, materials } = useGLTF('/SofaModel/Sofa.gltf');
 
-    const updateMaterials = () => {
-        if (materials.ASSET_MAT_MR) {
-            // Update seat material
-            materials.ASSET_MAT_MR.color.set(selectedVariants.seat === "velvet" ? new THREE.Color(1, 0, 0) :
-                selectedVariants.seat === "leather" ? new THREE.Color(0, 1, 0) :
-                    selectedVariants.seat === "fabric" ? new THREE.Color(0, 0, 1) :
-                        materials.ASSET_MAT_MR.color);
-        }
-    };
-
     useEffect(() => {
-        updateMaterials();
-    }, [selectedVariants]);
+        console.log('Updating materials for sofa:', selectedVariants);
+
+        if (materials.ASSET_MAT_MR) {
+            const newColor = selectedVariants.seat === "velvet" ? new THREE.Color(0.7, 0.1, 0.1) :
+                selectedVariants.seat === "leather" ? new THREE.Color(0.4, 0.2, 0.1) :
+                    selectedVariants.seat === "fabric" ? new THREE.Color(0.8, 0.8, 0.8) :
+                        materials.ASSET_MAT_MR.color;
+
+            materials.ASSET_MAT_MR.color.set(newColor);
+            console.log('Updated material color:', materials.ASSET_MAT_MR.color);
+        } else {
+            console.warn('Material ASSET_MAT_MR not found');
+        }
+    }, [selectedVariants, materials]);
 
     return (
         <group dispose={null}>
-            <mesh geometry={nodes.Mesh.geometry} material={materials.ASSET_MAT_MR} />
+            {Object.keys(nodes).map((key) => (
+                <mesh key={key} geometry={nodes[key].geometry} material={materials.ASSET_MAT_MR} />
+            ))}
         </group>
     );
 }
@@ -37,23 +41,28 @@ export function SofaModel({ selectedVariants }) {
 export function ChairModel({ selectedVariants }) {
     const { nodes, materials } = useGLTF('/ChairModel/Chair.gltf');
 
-    const updateMaterials = () => {
-        if (materials.Blinn3) {
-            materials.Blinn3.color.set(selectedVariants.seat === "leather" ? new THREE.Color(1, 0, 0) :
-                selectedVariants.seat === "pattern" ? new THREE.Color(0, 1, 0) :
-                    selectedVariants.seat === "velvet" ? new THREE.Color(0, 0, 1) :
-                        selectedVariants.seat === "white fabric" ? new THREE.Color(1, 1, 1) :
-                            materials.Blinn3.color);
-        }
-    };
-
     useEffect(() => {
-        updateMaterials();
-    }, [selectedVariants]);
+        console.log('Updating materials for chair:', selectedVariants);
+
+        if (materials.Blinn3) {
+            const newColor = selectedVariants.seat === "leather" ? new THREE.Color(0.3, 0.15, 0.05) :
+                selectedVariants.seat === "pattern" ? new THREE.Color(0.5, 0.5, 0.5) :
+                    selectedVariants.seat === "velvet" ? new THREE.Color(0.5, 0.0, 0.5) :
+                        selectedVariants.seat === "white fabric" ? new THREE.Color(1, 1, 1) :
+                            materials.Blinn3.color;
+
+            materials.Blinn3.color.set(newColor);
+            console.log('Updated material color:', materials.Blinn3.color);
+        } else {
+            console.warn('Material Blinn3 not found');
+        }
+    }, [selectedVariants, materials]);
 
     return (
         <group dispose={null}>
-            <mesh geometry={nodes.ASSET.geometry} material={materials.Blinn3} />
+            {Object.keys(nodes).map((key) => (
+                <mesh key={key} geometry={nodes[key].geometry} material={materials.Blinn3} />
+            ))}
         </group>
     );
 }
@@ -61,23 +70,28 @@ export function ChairModel({ selectedVariants }) {
 export function DeskModel({ selectedVariants }) {
     const { nodes, materials } = useGLTF('/DeskModel/Desk.gltf');
 
-    const updateMaterials = () => {
-        if (materials.ASSET_MAT_MR) {
-            materials.ASSET_MAT_MR.color.set(selectedVariants.top === "pollywood" ? new THREE.Color(1, 0, 0) :
-                selectedVariants.top === "white oak" ? new THREE.Color(0, 1, 0) :
-                    selectedVariants.top === "black" ? new THREE.Color(0, 0, 0) :
-                        selectedVariants.top === "poplar" ? new THREE.Color(1, 1, 0) :
-                            materials.ASSET_MAT_MR.color);
-        }
-    };
-
     useEffect(() => {
-        updateMaterials();
-    }, [selectedVariants]);
+        console.log('Updating materials for desk:', selectedVariants);
+
+        if (materials.ASSET_MAT_MR) {
+            const newColor = selectedVariants.top === "pollywood" ? new THREE.Color(0.55, 0.27, 0.07) :
+                selectedVariants.top === "white oak" ? new THREE.Color(0.93, 0.86, 0.75) :
+                    selectedVariants.top === "black" ? new THREE.Color(0, 0, 0) :
+                        selectedVariants.top === "poplar" ? new THREE.Color(0.67, 0.84, 0.45) :
+                            materials.ASSET_MAT_MR.color;
+
+            materials.ASSET_MAT_MR.color.set(newColor);
+            console.log('Updated material color:', materials.ASSET_MAT_MR.color);
+        } else {
+            console.warn('Material ASSET_MAT_MR not found');
+        }
+    }, [selectedVariants, materials]);
 
     return (
         <group dispose={null}>
-            <mesh geometry={nodes.polySurface3.geometry} material={materials.ASSET_MAT_MR} />
+            {Object.keys(nodes).map((key) => (
+                <mesh key={key} geometry={nodes[key].geometry} material={materials.ASSET_MAT_MR} />
+            ))}
         </group>
     );
 }
@@ -180,16 +194,20 @@ const Models = () => {
                     <div className="flex gap-2 mt-2 flex-wrap">
                         {renderVariantButtons(model === "desk" ? "top" : "seat")}
                     </div>
-                    <Typography className="font-normal text-blue-gray-500 mt-4">
-                        {model === "sofa" && "Select legs variant:"}
-                    </Typography>
-                    <div className="flex gap-2 mt-2 flex-wrap">
-                        {renderVariantButtons(model === "desk" ? "bottom" : "legs")}
-                    </div>
+                    {/* {model !== "chair" && (
+                        <>
+                            <Typography className="font-normal text-blue-gray-500 mt-4">
+                                Select legs variant:
+                            </Typography>
+                            <div className="flex gap-2 mt-2 flex-wrap">
+                                {renderVariantButtons("legs")}
+                            </div>
+                        </>
+                    )} */}
                 </div>
             </CardBody>
         </Card>
     );
-}
+};
 
 export default Models;
